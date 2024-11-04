@@ -1,44 +1,107 @@
 package br.Insper.Grupo_5_Projeto.Recomendacoes.service;
 
-import br.Insper.Grupo_5_Projeto.HistoricosRecomendacoes.service.HistoricoRecomendacaoService;
+import br.Insper.Grupo_5_Projeto.Historicos.service.HistoricoService;
+import br.Insper.Grupo_5_Projeto.Recomendacoes.dto.CatalogoDTO;
 import br.Insper.Grupo_5_Projeto.Recomendacoes.dto.FilmeDTO;
 import br.Insper.Grupo_5_Projeto.Recomendacoes.model.Recomendacao;
-import br.Insper.Grupo_5_Projeto.Recomendacoes.repository.RecomendacaoRepository;
+import br.Insper.Grupo_5_Projeto.Recomendacoes.model.RecomendacoesUsuario;
+import br.Insper.Grupo_5_Projeto.Recomendacoes.repository.RecomendacoesRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class RecomendacaoService {
 
     @Autowired
-    private RecomendacaoRepository recomendacaoRepository;
+    private RecomendacoesRepository recomendacoesRepository;
 
     @Autowired
-    private HistoricoRecomendacaoService historicoService;
+    private HistoricoService historicoService;
 
-    public Recomendacao gerarRecomendacaoParaUsuario(String userEmail, List<FilmeDTO> catalogoFilmes) {
-        if (catalogoFilmes == null || catalogoFilmes.isEmpty()) {
-            throw new IllegalArgumentException("O catálogo de filmes está vazio.");
+    public Recomendacao criarRecomendacaoAutomatica() {
+        CatalogoDTO catalogoDTO = obterCatalogo();
+
+        if (catalogoDTO == null) {
+            return null;
         }
 
-        List<String> filmesRecomendados = catalogoFilmes.stream()
-                .limit(3)
+        String userEmail = catalogoDTO.getUserEmail();
+        List<FilmeDTO> catalogoFilmes = catalogoDTO.getCatalogo();
+
+        List<String> filmesRecomendados = gerarFilmesRecomendados(userEmail, catalogoFilmes);
+
+        if (filmesRecomendados.isEmpty()) {
+            return null;
+        }
+
+        Recomendacao novaRecomendacao = new Recomendacao();
+        novaRecomendacao.setTipo("Automática");
+        novaRecomendacao.setDataRecomendacao(LocalDateTime.now());
+        novaRecomendacao.setFilmesRecomendados(filmesRecomendados);
+
+        adicionarRecomendacaoAutomatica(userEmail, novaRecomendacao);
+
+        historicoService.adicionarAoHistorico(userEmail, novaRecomendacao);
+
+        return novaRecomendacao;
+    }
+
+    private CatalogoDTO obterCatalogo() {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8080/catalogo";
+        try {
+            CatalogoDTO catalogoDTO = restTemplate.getForObject(url, CatalogoDTO.class);
+            return catalogoDTO;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private void adicionarRecomendacaoAutomatica(String email, Recomendacao novaRecomendacao) {
+        RecomendacoesUsuario recomendacoesUsuario = recomendacoesRepository.findByUserEmail(email);
+
+        if (recomendacoesUsuario == null) {
+            recomendacoesUsuario = new RecomendacoesUsuario();
+            recomendacoesUsuario.setUserEmail(email);
+        }
+
+        if (recomendacoesUsuario.getRecomendacoes() == null) {
+            recomendacoesUsuario.setRecomendacoes(new ArrayList<>());
+        }
+
+        recomendacoesUsuario.getRecomendacoes().add(novaRecomendacao);
+
+        recomendacoesRepository.save(recomendacoesUsuario);
+    }
+
+    private List<String> gerarFilmesRecomendados(String userEmail, List<FilmeDTO> catalogoFilmes) {
+        Set<String> filmesJaRecomendados = new HashSet<>();
+        RecomendacoesUsuario recomendacoesUsuario = recomendacoesRepository.findByUserEmail(userEmail);
+        if (recomendacoesUsuario != null && recomendacoesUsuario.getRecomendacoes() != null) {
+            for (Recomendacao recomendacao : recomendacoesUsuario.getRecomendacoes()) {
+                filmesJaRecomendados.addAll(recomendacao.getFilmesRecomendados());
+            }
+        }
+
+        List<String> filmesNaoRecomendados = catalogoFilmes.stream()
                 .map(FilmeDTO::getId)
+                .filter(filmeId -> !filmesJaRecomendados.contains(filmeId))
                 .collect(Collectors.toList());
 
-        Recomendacao recomendacao = new Recomendacao();
-        recomendacao.setUserEmail(userEmail);
-        recomendacao.setFilmesRecomendados(filmesRecomendados);
-        recomendacao.setDataRecomendacao(LocalDateTime.now());
+        List<String> filmesRecomendados = filmesNaoRecomendados.stream()
+                .limit(3)
+                .collect(Collectors.toList());
 
-        Recomendacao salva = recomendacaoRepository.save(recomendacao);
+        return filmesRecomendados;
+    }
 
-        historicoService.adicionarAoHistorico(salva);
-
-        return salva;
+    public RecomendacoesUsuario obterRecomendacoesPorEmail(String email) {
+        return recomendacoesRepository.findByUserEmail(email);
     }
 }

@@ -7,6 +7,7 @@ import java.util.List;
 @Getter
 @Setter
 public class CatalogoDTO {
-    private String email;
-    private List<FilmeDTO> filmes;
+    private String id;
+    private String userEmail;
+    private List<FilmeDTO> catalogo;
 }
