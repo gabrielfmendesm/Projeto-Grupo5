@@ -51,4 +51,4 @@ jobs:
         script: |
           docker stop projeto
           docker rm --force projeto
-          docker run -d -p 8086:8086 --network=projeto --name projeto gabrielfmendesm/projeto-grupo5:${{ github.sha }}
+          docker run -d -p 8086:8081 --network=projeto --name projeto gabrielfmendesm/projeto-grupo5:${{ github.sha }}
