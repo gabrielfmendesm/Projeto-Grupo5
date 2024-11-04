@@ -53,7 +53,7 @@ public class RecomendacaoService {
 
     private CatalogoDTO obterCatalogo() {
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8080/catalogo";
+        String url = "http://3.81.161.81:8081/catalogo";
         try {
             CatalogoDTO catalogoDTO = restTemplate.getForObject(url, CatalogoDTO.class);
             return catalogoDTO;
