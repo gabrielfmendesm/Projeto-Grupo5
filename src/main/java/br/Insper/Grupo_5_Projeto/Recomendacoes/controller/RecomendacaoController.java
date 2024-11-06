@@ -15,8 +15,8 @@ public class RecomendacaoController {
     private RecomendacaoService recomendacaoService;
 
     @PostMapping
-    public ResponseEntity<?> criarRecomendacao() {
-        Recomendacao recomendacao = recomendacaoService.criarRecomendacaoAutomatica();
+    public ResponseEntity<?> criarRecomendacao(@RequestHeader("Authorization") String jwtToken) {
+        Recomendacao recomendacao = recomendacaoService.criarRecomendacaoAutomatica(jwtToken);
 
         if (recomendacao == null) {
             return ResponseEntity.badRequest().body("Nenhuma nova recomendação disponível.");
@@ -25,9 +25,9 @@ public class RecomendacaoController {
         return ResponseEntity.ok(recomendacao);
     }
 
-    @GetMapping("/{email}")
-    public ResponseEntity<?> obterRecomendacoes(@PathVariable String email) {
-        RecomendacoesUsuario recomendacoesUsuario = recomendacaoService.obterRecomendacoesPorEmail(email);
+    @GetMapping
+    public ResponseEntity<?> obterRecomendacoes(@RequestHeader("Authorization") String jwtToken) {
+        RecomendacoesUsuario recomendacoesUsuario = recomendacaoService.obterRecomendacoesPorEmail(jwtToken);
 
         if (recomendacoesUsuario == null) {
             return ResponseEntity.notFound().build();

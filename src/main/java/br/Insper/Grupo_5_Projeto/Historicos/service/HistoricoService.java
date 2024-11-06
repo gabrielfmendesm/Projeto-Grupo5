@@ -3,6 +3,7 @@ package br.Insper.Grupo_5_Projeto.Historicos.service;
 import br.Insper.Grupo_5_Projeto.Historicos.model.Historico;
 import br.Insper.Grupo_5_Projeto.Historicos.repository.HistoricoRepository;
 import br.Insper.Grupo_5_Projeto.Recomendacoes.model.Recomendacao;
+import br.Insper.Grupo_5_Projeto.common.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,12 +32,14 @@ public class HistoricoService {
         historicoRepository.save(historico);
     }
 
-    public Historico obterHistoricoPorEmail(String email) {
-        return historicoRepository.findByUserEmail(email);
+    public Historico obterHistoricoPorEmail(String jwtToken) {
+        String userEmail = TokenUtils.getEmailFromToken(jwtToken);
+        return historicoRepository.findByUserEmail(userEmail);
     }
 
-    public boolean apagarHistorico(String email) {
-        Historico historico = historicoRepository.findByUserEmail(email);
+    public boolean apagarHistorico(String jwtToken) {
+        String userEmail = TokenUtils.getEmailFromToken(jwtToken);
+        Historico historico = historicoRepository.findByUserEmail(userEmail);
 
         if (historico != null) {
             historicoRepository.delete(historico);

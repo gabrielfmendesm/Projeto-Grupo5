@@ -4,6 +4,7 @@ import br.Insper.Grupo_5_Projeto.Historicos.service.HistoricoService;
 import br.Insper.Grupo_5_Projeto.Recomendacoes.model.RecomendacoesUsuario;
 import br.Insper.Grupo_5_Projeto.Recomendacoes.repository.RecomendacoesRepository;
 import br.Insper.Grupo_5_Projeto.RecomendacoesManuais.model.RecomendacaoManual;
+import br.Insper.Grupo_5_Projeto.common.TokenUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,8 @@ public class RecomendacaoManualService {
     @Autowired
     private HistoricoService historicoService;
 
-    public RecomendacaoManual criarRecomendacaoManual(String userEmail, List<String> filmesRecomendados) {
+    public RecomendacaoManual criarRecomendacaoManual(String jwtToken, List<String> filmesRecomendados) {
+        String userEmail = TokenUtils.getEmailFromToken(jwtToken);
         RecomendacaoManual novaRecomendacaoManual = new RecomendacaoManual();
         novaRecomendacaoManual.setId(new ObjectId().toHexString());
         novaRecomendacaoManual.setTipo("Manual");
@@ -35,7 +37,8 @@ public class RecomendacaoManualService {
         return novaRecomendacaoManual;
     }
 
-    public void adicionarRecomendacaoManual(String userEmail, RecomendacaoManual novaRecomendacaoManual) {
+    public void adicionarRecomendacaoManual(String jwtToken, RecomendacaoManual novaRecomendacaoManual) {
+        String userEmail = TokenUtils.getEmailFromToken(jwtToken);
         RecomendacoesUsuario recomendacoesUsuario = recomendacoesRepository.findByUserEmail(userEmail);
 
         if (recomendacoesUsuario == null) {
@@ -52,8 +55,9 @@ public class RecomendacaoManualService {
         recomendacoesRepository.save(recomendacoesUsuario);
     }
 
-    public RecomendacaoManual editarRecomendacaoManual(String email, String recomendacaoId, List<String> filmesRecomendados) {
-        RecomendacoesUsuario recomendacoesUsuario = recomendacoesRepository.findByUserEmail(email);
+    public RecomendacaoManual editarRecomendacaoManual(String jwtToken, String recomendacaoId, List<String> filmesRecomendados) {
+        String userEmail = TokenUtils.getEmailFromToken(jwtToken);
+        RecomendacoesUsuario recomendacoesUsuario = recomendacoesRepository.findByUserEmail(userEmail);
 
         if (recomendacoesUsuario != null) {
             for (RecomendacaoManual recomendacao : recomendacoesUsuario.getRecomendacoesManuais()) {
@@ -63,7 +67,7 @@ public class RecomendacaoManualService {
 
                     recomendacoesRepository.save(recomendacoesUsuario);
 
-                    historicoService.adicionarAoHistorico(email, recomendacao);
+                    historicoService.adicionarAoHistorico(userEmail, recomendacao);
 
                     return recomendacao;
                 }
@@ -73,8 +77,9 @@ public class RecomendacaoManualService {
         return null;
     }
 
-    public boolean excluirRecomendacaoManual(String email, String recomendacaoId) {
-        RecomendacoesUsuario recomendacoesUsuario = recomendacoesRepository.findByUserEmail(email);
+    public boolean excluirRecomendacaoManual(String jwtToken, String recomendacaoId) {
+        String userEmail = TokenUtils.getEmailFromToken(jwtToken);
+        RecomendacoesUsuario recomendacoesUsuario = recomendacoesRepository.findByUserEmail(userEmail);
 
         if (recomendacoesUsuario != null) {
             RecomendacaoManual recomendacaoParaExcluir = null;
@@ -99,8 +104,9 @@ public class RecomendacaoManualService {
         return false;
     }
 
-     public List<RecomendacaoManual> obterRecomendacoesManuais(String email) {
-        RecomendacoesUsuario recomendacoesUsuario = recomendacoesRepository.findByUserEmail(email);
+     public List<RecomendacaoManual> obterRecomendacoesManuais(String jwtToken) {
+        String userEmail = TokenUtils.getEmailFromToken(jwtToken);
+        RecomendacoesUsuario recomendacoesUsuario = recomendacoesRepository.findByUserEmail(userEmail);
 
         if (recomendacoesUsuario != null) {
             return recomendacoesUsuario.getRecomendacoesManuais();

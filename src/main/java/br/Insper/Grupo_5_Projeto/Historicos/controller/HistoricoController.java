@@ -13,9 +13,9 @@ public class HistoricoController {
     @Autowired
     private HistoricoService historicoService;
 
-    @GetMapping("/{email}")
-    public ResponseEntity<?> obterHistorico(@PathVariable String email) {
-        Historico historico = historicoService.obterHistoricoPorEmail(email);
+    @GetMapping
+    public ResponseEntity<?> obterHistorico(@RequestHeader("Authorization") String jwtToken) {
+        Historico historico = historicoService.obterHistoricoPorEmail(jwtToken);
 
         if (historico == null) {
             return ResponseEntity.notFound().build();
@@ -24,9 +24,9 @@ public class HistoricoController {
         return ResponseEntity.ok(historico);
     }
 
-    @DeleteMapping("/{email}")
-    public ResponseEntity<?> apagarHistorico(@PathVariable String email) {
-        boolean removido = historicoService.apagarHistorico(email);
+    @DeleteMapping
+    public ResponseEntity<?> apagarHistorico(@RequestHeader("Authorization") String jwtToken) {
+        boolean removido = historicoService.apagarHistorico(jwtToken);
 
         if (removido) {
             return ResponseEntity.ok("Histórico apagado com sucesso.");

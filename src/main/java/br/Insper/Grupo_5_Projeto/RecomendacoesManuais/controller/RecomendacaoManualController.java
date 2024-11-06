@@ -15,15 +15,20 @@ public class RecomendacaoManualController {
     @Autowired
     private RecomendacaoManualService recomendacaoManualService;
 
-    @PostMapping("/{userEmail}")
-    public ResponseEntity<RecomendacaoManual> criarRecomendacaoManual(@PathVariable String userEmail, @RequestBody List<String> filmesRecomendados) {
-        RecomendacaoManual novaRecomendacao = recomendacaoManualService.criarRecomendacaoManual(userEmail, filmesRecomendados);
+    @PostMapping
+    public ResponseEntity<RecomendacaoManual> criarRecomendacaoManual(
+            @RequestHeader("Authorization") String jwtToken,
+            @RequestBody List<String> filmesRecomendados) {
+        RecomendacaoManual novaRecomendacao = recomendacaoManualService.criarRecomendacaoManual(jwtToken, filmesRecomendados);
         return ResponseEntity.ok(novaRecomendacao);
     }
 
-    @PutMapping("/{userEmail}/{recomendacaoId}")
-    public ResponseEntity<RecomendacaoManual> editarRecomendacaoManual(@PathVariable String userEmail, @PathVariable String recomendacaoId, @RequestBody List<String> filmesRecomendados) {
-        RecomendacaoManual recomendacaoAtualizada = recomendacaoManualService.editarRecomendacaoManual(userEmail, recomendacaoId, filmesRecomendados);
+    @PutMapping("/{recomendacaoId}")
+    public ResponseEntity<RecomendacaoManual> editarRecomendacaoManual(
+            @RequestHeader("Authorization") String jwtToken,
+            @PathVariable String recomendacaoId,
+            @RequestBody List<String> filmesRecomendados) {
+        RecomendacaoManual recomendacaoAtualizada = recomendacaoManualService.editarRecomendacaoManual(jwtToken, recomendacaoId, filmesRecomendados);
         if (recomendacaoAtualizada != null) {
             return ResponseEntity.ok(recomendacaoAtualizada);
         } else {
@@ -31,9 +36,11 @@ public class RecomendacaoManualController {
         }
     }
 
-    @DeleteMapping("/{userEmail}/{recomendacaoId}")
-    public ResponseEntity<String> excluirRecomendacaoManual(@PathVariable String userEmail, @PathVariable String recomendacaoId) {
-        boolean excluido = recomendacaoManualService.excluirRecomendacaoManual(userEmail, recomendacaoId);
+    @DeleteMapping("/{recomendacaoId}")
+    public ResponseEntity<String> excluirRecomendacaoManual(
+            @RequestHeader("Authorization") String jwtToken,
+            @PathVariable String recomendacaoId) {
+        boolean excluido = recomendacaoManualService.excluirRecomendacaoManual(jwtToken, recomendacaoId);
         if (excluido) {
             return ResponseEntity.ok("Recomendação excluída com sucesso.");
         } else {
@@ -41,9 +48,9 @@ public class RecomendacaoManualController {
         }
     }
 
-    @GetMapping("/{userEmail}")
-    public ResponseEntity<List<RecomendacaoManual>> obterRecomendacoesManuais(@PathVariable String userEmail) {
-        List<RecomendacaoManual> recomendacoes = recomendacaoManualService.obterRecomendacoesManuais(userEmail);
+    @GetMapping
+    public ResponseEntity<List<RecomendacaoManual>> obterRecomendacoesManuais(@RequestHeader("Authorization") String jwtToken) {
+        List<RecomendacaoManual> recomendacoes = recomendacaoManualService.obterRecomendacoesManuais(jwtToken);
         return ResponseEntity.ok(recomendacoes);
     }
 }
