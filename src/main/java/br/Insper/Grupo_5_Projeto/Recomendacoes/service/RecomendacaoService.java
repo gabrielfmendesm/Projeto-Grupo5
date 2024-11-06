@@ -68,8 +68,7 @@ public class RecomendacaoService {
         return novaRecomendacao;
     }
 
-    private void adicionarRecomendacaoAutomatica(String jwtToken, Recomendacao novaRecomendacao) {
-        String userEmail = getEmailFromToken(jwtToken);
+    private void adicionarRecomendacaoAutomatica(String userEmail, Recomendacao novaRecomendacao) {
         RecomendacoesUsuario recomendacoesUsuario = recomendacoesRepository.findByUserEmail(userEmail);
 
         if (recomendacoesUsuario == null) {
