@@ -1,8 +1,9 @@
 br/Insper/Grupo_5_Projeto/Historicos/model/Historico.class
 br/Insper/Grupo_5_Projeto/Recomendacoes/controller/RecomendacaoController.class
-br/Insper/Grupo_5_Projeto/Catalogo/model/Filme.class
+br/Insper/Grupo_5_Projeto/common/WebSecurityConfig.class
 br/Insper/Grupo_5_Projeto/RecomendacoesManuais/model/RecomendacaoManual.class
 br/Insper/Grupo_5_Projeto/Historicos/repository/HistoricoRepository.class
+br/Insper/Grupo_5_Projeto/common/TokenUtils.class
 br/Insper/Grupo_5_Projeto/Recomendacoes/dto/CatalogoDTO.class
 br/Insper/Grupo_5_Projeto/Recomendacoes/model/RecomendacoesUsuario.class
 br/Insper/Grupo_5_Projeto/RecomendacoesManuais/service/RecomendacaoManualService.class
@@ -13,7 +14,5 @@ br/Insper/Grupo_5_Projeto/Historicos/service/HistoricoService.class
 br/Insper/Grupo_5_Projeto/Recomendacoes/service/RecomendacaoService.class
 br/Insper/Grupo_5_Projeto/RecomendacoesManuais/controller/RecomendacaoManualController.class
 br/Insper/Grupo_5_Projeto/Recomendacoes/repository/RecomendacoesRepository.class
-br/Insper/Grupo_5_Projeto/Catalogo/repository/CatalogoRepository.class
-br/Insper/Grupo_5_Projeto/Catalogo/controller/CatalogoController.class
-br/Insper/Grupo_5_Projeto/Catalogo/model/Catalogo.class
+br/Insper/Grupo_5_Projeto/Recomendacoes/service/RecomendacaoService$1.class
 br/Insper/Grupo_5_Projeto/Historicos/controller/HistoricoController.class
