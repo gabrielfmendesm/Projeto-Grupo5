@@ -37,8 +37,7 @@ public class RecomendacaoManualService {
         return novaRecomendacaoManual;
     }
 
-    public void adicionarRecomendacaoManual(String jwtToken, RecomendacaoManual novaRecomendacaoManual) {
-        String userEmail = TokenUtils.getEmailFromToken(jwtToken);
+    public void adicionarRecomendacaoManual(String userEmail, RecomendacaoManual novaRecomendacaoManual) {
         RecomendacoesUsuario recomendacoesUsuario = recomendacoesRepository.findByUserEmail(userEmail);
 
         if (recomendacoesUsuario == null) {

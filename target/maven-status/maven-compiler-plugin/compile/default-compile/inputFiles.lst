@@ -5,7 +5,6 @@
 /Users/gabrielmendes/Desktop/untitled folder/src/main/java/br/Insper/Grupo_5_Projeto/Historicos/service/HistoricoService.java
 /Users/gabrielmendes/Desktop/untitled folder/src/main/java/br/Insper/Grupo_5_Projeto/Recomendacoes/controller/RecomendacaoController.java
 /Users/gabrielmendes/Desktop/untitled folder/src/main/java/br/Insper/Grupo_5_Projeto/Recomendacoes/dto/CatalogoDTO.java
-/Users/gabrielmendes/Desktop/untitled folder/src/main/java/br/Insper/Grupo_5_Projeto/Recomendacoes/dto/FilmeDTO.java
 /Users/gabrielmendes/Desktop/untitled folder/src/main/java/br/Insper/Grupo_5_Projeto/Recomendacoes/model/Recomendacao.java
 /Users/gabrielmendes/Desktop/untitled folder/src/main/java/br/Insper/Grupo_5_Projeto/Recomendacoes/model/RecomendacoesUsuario.java
 /Users/gabrielmendes/Desktop/untitled folder/src/main/java/br/Insper/Grupo_5_Projeto/Recomendacoes/repository/RecomendacoesRepository.java

@@ -7,7 +7,6 @@ br/Insper/Grupo_5_Projeto/common/TokenUtils.class
 br/Insper/Grupo_5_Projeto/Recomendacoes/dto/CatalogoDTO.class
 br/Insper/Grupo_5_Projeto/Recomendacoes/model/RecomendacoesUsuario.class
 br/Insper/Grupo_5_Projeto/RecomendacoesManuais/service/RecomendacaoManualService.class
-br/Insper/Grupo_5_Projeto/Recomendacoes/dto/FilmeDTO.class
 br/Insper/Grupo_5_Projeto/Recomendacoes/model/Recomendacao.class
 br/Insper/Grupo_5_Projeto/Grupo5ProjetoApplication.class
 br/Insper/Grupo_5_Projeto/Historicos/service/HistoricoService.class
