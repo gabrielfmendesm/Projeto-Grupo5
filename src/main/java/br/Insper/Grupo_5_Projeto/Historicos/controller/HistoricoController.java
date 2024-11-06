@@ -22,6 +22,7 @@ public class HistoricoController {
         }
 
         return ResponseEntity.ok(historico);
+
     }
 
     @DeleteMapping
