@@ -26,7 +26,6 @@ public class RecomendacaoManualService {
         String userEmail = TokenUtils.getEmailFromToken(jwtToken);
         RecomendacaoManual novaRecomendacaoManual = new RecomendacaoManual();
         novaRecomendacaoManual.setId(new ObjectId().toHexString());
-        novaRecomendacaoManual.setTipo("Manual");
         novaRecomendacaoManual.setDataRecomendacao(LocalDateTime.now());
         novaRecomendacaoManual.setFilmesRecomendados(filmesRecomendados);
 
